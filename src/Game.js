@@ -56,7 +56,7 @@ const Game = ({newGame, count}) => {
     }
 
     const checkGameEnd = (score) => {
-      if (score === 5) {
+      if (score === 12) {
         newGame(count + 1)
       }
     }
