@@ -1,7 +1,7 @@
 body {
   margin: 0;
   box-sizing: border-box;
-  background-color: #f8f8f8;
+  background-color: #d3d1d1;
 }
 
 .card {
@@ -84,10 +84,104 @@ body {
 }
 
 .scoreboard {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
 }
 
-.helper{
+.score {
+  font-size: 3em;
+  align-self: center;
+  margin-left: 10px;
+}
+
+.helper {
   font-size: 2rem;
+  animation: fadeInAnimation ease 3s;
+  animation-fill-mode: forwards;
+  font-family: Rocher;
+}
+
+.score-txt {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  font-family: Rocher;
+}
+
+
+@keyframes fadeInAnimation {
+  100% {
+      opacity: 1;
+  }
+  0% {
+      opacity: 0;
+   }
+}
+
+.takeover {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  font-family: Rocher;
+  font-size: 3rem;
+
+
+
+}
+
+
+.main-takeover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+}
+
+@font-face {
+  font-family: 'Rocher';
+  src: url(https://assets.codepen.io/9632/RocherColorGX.woff2);
+}
+
+
+button {
+  font-size: 16px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  padding: 13px 20px 13px;
+  outline: 0;
+  border: 1px solid black;
+  cursor: pointer;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+button:after {
+  content: "";
+  background-color: #ffe54c;
+  width: 100%;
+  z-index: -1;
+  position: absolute;
+  height: 100%;
+  top: 7px;
+  left: 7px;
+  transition: 0.2s;
+}
+
+button:hover:after {
+  top: 0px;
+  left: 0px;
+}
+
+@media (min-width: 768px) {
+  .button {
+    padding: 13px 50px 13px;
+  }
 }

@@ -4,12 +4,10 @@ import { Scoreboard } from "./Components/Scoreboard";
 import "./Game.css"
 
 
-const Game = () => {
-    const [catPics, setCatPics] = useState([]);
+const Game = ({newGame, count}) => {
     const [helper, setHelper] = useState([]);
     const [score, setScore] = useState(0);
     const [best, setBest] = useState(0);
-    const [gameOver, setGameOver] = useState(false);
     const [cards, setCards] = useState(
       [ {cardName: "card1", id: 1, clicked: false, image: ""},
         {cardName: "card2", id: 2, clicked: false, image: ""},
@@ -27,36 +25,41 @@ const Game = () => {
     )
 
     useEffect (() => {
+      const getResponse = async() => {
+        const response = await fetch(
+          'https://api.thecatapi.com/v1/images/search?limit=12&api_key=live_fRBPkuqZuzWGfFTEaO5HrliXtxOuq6xQknWkubLOqyBIZUo4baorURksbK6FUe9B',
+          {
+            method: 'GET',
+            headers: {
+              'x-rapidapi-key': 'live_fRBPkuqZuzWGfFTEaO5HrliXtxOuq6xQknWkubLOqyBIZUo4baorURksbK6FUe9B'
+            }
+          }
+        );
+        const data = await response.json();
+        let tempArray = []
+        for (let i=0; i<data.length; i++) {
+          tempArray.push({"cardName" : "card" + i+1, "id" : i+1, clicked: false, image: data[i].url})
+          setCards(tempArray)
+        }
+  
+  
+      }
       getResponse()
+      setHelper("Find all the cats! (click on each only ONCE)")
       }, []
     )
 
-    const getResponse = async() => {
-      const response = await fetch(
-        'https://api.thecatapi.com/v1/images/search?limit=12&api_key=live_fRBPkuqZuzWGfFTEaO5HrliXtxOuq6xQknWkubLOqyBIZUo4baorURksbK6FUe9B',
-        {
-          method: 'GET',
-          headers: {
-            'x-rapidapi-key': 'live_fRBPkuqZuzWGfFTEaO5HrliXtxOuq6xQknWkubLOqyBIZUo4baorURksbK6FUe9B'
-          }
-        }
-      );
-      const data = await response.json(); // Extracting data as a JSON Object from the response
-      let tempArray = JSON.parse(JSON.stringify(cards))
-      for (let i=0; i<data.length; i++) {
-        tempArray[i].image = data[i].url
-        setCatPics(tempArray)
-        setCards(tempArray)
-      }
-
-
-    }
 
     const shuffleCards = () => {
      const shuffled = cards.sort(() => Math.random() - 0.5)
      return shuffled
     }
 
+    const checkGameEnd = (score) => {
+      if (score === 5) {
+        newGame(count + 1)
+      }
+    }
 
     const handleScore = (unique) => {
       if (unique === true && score >= best) {
@@ -64,15 +67,18 @@ const Game = () => {
         setScore(newScore)
         setBest(newScore)
         setHelper("")
+        checkGameEnd(newScore)
 
       }
       else if (unique === true && score < best) {
-        setScore(score + 1)
+        let newScore = score + 1
+        setScore(newScore)
         setHelper("")
+        checkGameEnd(newScore)
 
       }
       else {
-        setHelper("You clicked this one already!")
+        setHelper("Already clicked!")
         setScore(0)
         resetGame()
       }
@@ -90,8 +96,8 @@ const Game = () => {
     const handleClick = (e) => {
       let tempArray = [...cards]
       for (let i=0; i<tempArray.length; i++) {
-        if (tempArray[i].id == e.target.attributes[1].nodeValue) {
-          if (tempArray[i].clicked == false) {
+        if (parseInt(tempArray[i].id) === parseInt(e.target.attributes[1].nodeValue)) {
+          if (tempArray[i].clicked === false) {
             handleScore(true)
             tempArray[i].clicked = true
           }
@@ -104,9 +110,7 @@ const Game = () => {
       setCards(tempArray)
     }
 
-    const unhideCats = () => {
 
-    }
 
 
   return (

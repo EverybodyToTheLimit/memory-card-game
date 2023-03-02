@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Game from './Game';
+import { GameController } from './GameController';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+
 root.render(
   <React.StrictMode>
-    <Game />
+    <GameController/>
   </React.StrictMode>
 );
 
